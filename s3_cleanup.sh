@@ -68,7 +68,7 @@ function deleteEmptyBuckets() {
 }
 
 # Menu for the S3 Cleanup script
-function mainMenu() {
+function s3Menu() {
     while true; do
     clear
     echo -ne "=== Menu for S3 Cleanup === \n"
@@ -108,4 +108,4 @@ function mainMenu() {
 }
 
 # Run the Menu for S3 script
-mainMenu
+s3Menu
