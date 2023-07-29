@@ -13,18 +13,27 @@ if ! (aws configure list); then
     exit 1
 fi
 
-# Get the list of all S3 buckets and objects
-s3_list_output=$(aws s3 ls)
-
-# List out all AWS S3 Buckets and Objects
+# Function to list Buckets and Objects
 function listBucketsAndObjects() {
-    echo "$s3_list_output" | nl
-    printf "\n"
+    # Check if the ageThresholdDays is provided as an argument
+    if [ $# -eq 1 ]; then
+        ageThresholdDays=$1
+    else
+        ageThresholdDays=0
+    fi
 
-    aws s3 ls | awk '{print $NF}' | while read bucket; do
-        echo " Objects in ${bold}$bucket${reset}"
-        aws s3 ls $bucket | nl
-        printf "\n"
+    aws s3 ls | awk '{print $NF}' | while read -r bucket; do
+        if [ $ageThresholdDays -eq 0 ]; then
+            # List all objects in the bucket
+            echo " Objects in ${bold}$bucket${reset}"
+            aws s3 ls "$bucket" | nl
+            printf "\n"
+        else
+            # List only objects older than the ageThresholdDays
+            echo " Objects in ${bold}$bucket${reset} (Older than $ageThresholdDays days)"
+            aws s3api list-objects --bucket "$bucket" --query 'Contents[?LastModified < `'"$(date -v-${ageThresholdDays}d -u +%Y-%m-%dT%H:%M:%SZ)"'`].{Key: Key}' --output text | nl
+            printf "\n"
+        fi
     done
 }
 
@@ -41,8 +50,7 @@ function deleteObjectsOlderThan30Days() {
             else
                 printf "  Deleting \"${bold}$objName${reset}\" in bucket \"${bold}$bucket${reset}\"\n"
             fi
-            # Uncomment the line below to delete the objects
-            #aws s3api delete-object --bucket "$bucket" --key "$objName"
+            aws s3api delete-object --bucket "$bucket" --key "$objName"
         done
     done
 }
@@ -54,16 +62,50 @@ function deleteEmptyBuckets() {
         if aws s3api list-objects --bucket "$bucket" --query 'Contents' 2>/dev/null | grep -q 'Key'; then
             continue
         fi
-
         echo "Deleting empty bucket: ${bold}$bucket${reset}"
-
-        # Uncomment the line below to delete the empty bucket
-        #aws s3 rb "s3://$bucket"
+        aws s3 rb "s3://$bucket"
     done
 }
-printf '\n***List all available Buckets and Objects***\n'
-listBucketsAndObjects
-printf '\n***Deleting Objects Older Than 30 Days***\n'
-deleteObjectsOlderThan30Days
-printf '\n***Deleting Empty Buckets***\n'
-deleteEmptyBuckets
+
+# Menu for the S3 Cleanup script
+function mainMenu() {
+    while true; do
+    clear
+    echo -ne "=== Menu for S3 Cleanup === \n"
+        echo " 1) List all available Buckets and Objects"
+        echo " 2) List only Buckets and Objects older than 30 days"
+        echo " 3) Delete Objects Older Than 30 Days"
+        echo " 4) Delete Empty Buckets"
+        echo " 5) Exit"
+        read -p "Enter your choice: " num
+        case $num in
+            1)
+                listBucketsAndObjects
+                ;;
+            2)
+                echo -n "Enter the age threshold (in days): "
+                read ageThreshold
+                listBucketsAndObjects "$ageThreshold"
+                ;;
+            3)
+                printf '\n***Deleting Objects Older Than 30 Days***\n'
+                deleteObjectsOlderThan30Days
+                ;;
+            4)
+                printf '\n***Deleting Empty Buckets***\n'
+                deleteEmptyBuckets
+                ;;
+            5)
+                echo "Exiting..."
+                exit 0
+                ;;
+            *)
+                echo "Invalid choice. Please try again"
+                ;;
+        esac
+        read -n 1 -s -r -p "Press any key to continue..."
+    done
+}
+
+# Run the Menu for S3 script
+mainMenu
