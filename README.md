@@ -8,11 +8,11 @@ It is important to clean up any unused resources, and one of the best ways to do
 The Main Menu serves as the gateway for users to select their desired AWS resource for cleanup.
 
 ### S3 
-In my article, **[Bash Scripts to Clean Up AWS Resources (Part 1 — S3 Resources)]** (https://medium.com/@rachelvfmurphy/bash-scripts-to-clean-up-aws-resources-part-1-s3-resources-e6a865ee3e60), I guide you through the creation of a bash script designed to clean up AWS S3 resources.   
+In my article, **[Bash Scripts to Clean Up AWS Resources (Part 1 — S3 Resources)]**(https://medium.com/@rachelvfmurphy/bash-scripts-to-clean-up-aws-resources-part-1-s3-resources-e6a865ee3e60), I guide you through the creation of a bash script designed to clean up AWS S3 resources.   
 The script's objective is to identify and remove unused S3 buckets and objects older than 30 days.
 
 ### EC2
-Discover how to effectively manage your AWS EC2 instances in my article series **Part 2: Cleaning Up AWS Resources — EC2 Instances** across three parts: **[1]** (https://medium.com/@rachelvfmurphy/part-2-cleaning-up-aws-resources-ec2-instances-c2b23fdca3b6), **[2]** (https://medium.com/@rachelvfmurphy/part-2-ec2-cleanup-building-use-case-functions-step-3-1893c8f1cdc6), **[3]** (https://medium.com/@rachelvfmurphy/part-2-ec2-cleanup-perform-common-actions-step-4-10ecb597005).   
+Discover how to effectively manage your AWS EC2 instances in my article series **Part 2: Cleaning Up AWS Resources — EC2 Instances** across three parts: **[1]**(https://medium.com/@rachelvfmurphy/part-2-cleaning-up-aws-resources-ec2-instances-c2b23fdca3b6), **[2]**(https://medium.com/@rachelvfmurphy/part-2-ec2-cleanup-building-use-case-functions-step-3-1893c8f1cdc6), **[3]**(https://medium.com/@rachelvfmurphy/part-2-ec2-cleanup-perform-common-actions-step-4-10ecb597005).   
 I delve into use case scenarios, step-by-step procedures, and provide a script to help you streamline the process of cleaning up EC2 resources.
 
 ## Requirements
@@ -26,7 +26,7 @@ A valid AWS account with Access Key and Secret Key.
   `brew install jq`  
 
     AWS CLI  
-    **[Install or update the latest version of the AWS CLI]** (https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+    **[Install or update the latest version of the AWS CLI]**(https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
 
 - Change permissions of the script prior to executing.  
