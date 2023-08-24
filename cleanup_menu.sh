@@ -3,7 +3,7 @@
 
 while true; do
     clear
-    echo -ne "=== Main Menu for AWS Rescource CLeanup === \n"
+    echo -ne "=== Main Menu for AWS Rescource Cleanup === \n"
     echo " 1) AWS S3 "
     echo " 2) AWS EC2 "
     echo " 3) Exit "

@@ -13,6 +13,9 @@ if ! (aws configure list); then
     exit 1
 fi
 
+# Optionally, you can prompt the user to press Enter before continuing
+read -r -p "Press Enter to continue..."
+
 # Function to list Buckets and Objects
 function listBucketsAndObjects() {
     # Check if the ageThresholdDays is provided as an argument
